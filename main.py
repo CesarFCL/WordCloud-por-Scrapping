@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import numpy as np
+from PIL import Image
 
 #URL del perfil con las etiquetas de SO (Esta parte hay q cambiarla, se debe ingresar la URL y que busque al usuario)
 
@@ -29,8 +30,14 @@ for i in frec:
 #Aquí utilizamos zip para unir las etiquetas con sus repsectivas frecuencias
 etfrecuencias = dict(zip(etiquetas, frecuencia))
 
+#Se establece que imagen se usara para el WordCloud
+custom_mask = np.array(Image.open("mancha.jpg"))
+
 #Utilizamos el método .generate_from_frequencies pasandole las frecuencias
-cloud = WordCloud(background_color="white").generate_from_frequencies(etfrecuencias)
+cloud = WordCloud(background_color="black",scale=2,relative_scaling=0.1, mask=custom_mask,contour_width=1, contour_color='steelblue').generate_from_frequencies(etfrecuencias)
+
+#Se guarda la imagen
+cloud.to_file('wcloud.png')
 
 #Se presenta el WordCloud
 plt.figure()
