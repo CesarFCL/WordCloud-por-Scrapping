@@ -6,9 +6,12 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 
-#URL del perfil con las etiquetas de SO (Esta parte hay q cambiarla, se debe ingresar la URL y que busque al usuario)
+#Ingreso de ID de usuario de StackOverflow por teclado
+print("Introduzca la ID del usuario: ")
+ID= input()
 
-url = "https://es.stackoverflow.com/users/22851/pablo-lozano?tab=tags"
+#Se obtiene la pagina de etiquetas a partir de la URL del usuario
+url = f'https://es.stackoverflow.com/users/{ID}?tab=tags'
 page = requests.get(url)
 soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -20,7 +23,11 @@ frec = soup.find_all('span', class_='item-multiplier-count')
 etiquetas = list()
 for i in et:
     etiquetas.append(i.text)
-
+#Hay veces en las que un perfil muestra la etiqueta principal y al tomar los datos esa etiqueta queda repetida.
+#Con este if nos aseguramos que en caso de que se este tomando una etiqueta principal, esta se elimina para que no cause irregularidades.
+if etiquetas[0] == etiquetas[1]:
+    etiquetas.pop(0)
+    
 #lista frecuencia de etiquetas
 frecuencia = list()
 for i in frec:
